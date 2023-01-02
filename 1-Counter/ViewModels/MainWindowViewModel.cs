@@ -1,7 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace _1_Counter.ViewModels;
-public class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ObservableObject
 {
-    public string Greeting => "Welcome to Avalonia!";
+    [ObservableProperty]
+    private int count;
+
+    [RelayCommand]
+    private void OnCountClicked() => Count++;
 }
