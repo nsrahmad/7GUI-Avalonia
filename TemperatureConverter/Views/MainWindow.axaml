@@ -17,7 +17,7 @@
     </Design.DataContext>
 
 	<Window.Resources>
-		<conv:CelsiusConverter x:Key="CelsiusConverter" />
+		<conv:FahrenheitConverter x:Key="FahrenheitConverter" />
 	</Window.Resources>
 
 	<Border Padding="8">
@@ -25,7 +25,7 @@
 			<NumericUpDown MinWidth="100" Value="{CompiledBinding TemperatureCelsius}" ShowButtonSpinner="False"></NumericUpDown>
 			<Label VerticalContentAlignment="Center">Celsius</Label>
 			<Label VerticalContentAlignment="Center">=</Label>
-			<NumericUpDown MinWidth="100" Value="{CompiledBinding TemperatureCelsius, Converter={StaticResource CelsiusConverter}}" ShowButtonSpinner="False"></NumericUpDown>
+			<NumericUpDown MinWidth="100" Value="{CompiledBinding TemperatureCelsius, Converter={StaticResource FahrenheitConverter}}" ShowButtonSpinner="False"></NumericUpDown>
 			<Label VerticalContentAlignment="Center">Fahrenheit</Label>
 		</StackPanel>
 	</Border>
