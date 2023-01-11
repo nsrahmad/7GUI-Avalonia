@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1-Counter", "1-Counter\1-Counter.csproj", "{CCFD6E81-62B4-43D6-92B4-CBE62F71FBFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureConverter", "TemperatureConverter\TemperatureConverter.csproj", "{B04DB7BF-B722-4E08-9E38-7F580F5D53A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemperatureConverter", "TemperatureConverter\TemperatureConverter.csproj", "{B04DB7BF-B722-4E08-9E38-7F580F5D53A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightBooker", "FlightBooker\FlightBooker.csproj", "{A829D9A1-5FFE-4179-A3F3-9468546CC548}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B04DB7BF-B722-4E08-9E38-7F580F5D53A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B04DB7BF-B722-4E08-9E38-7F580F5D53A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B04DB7BF-B722-4E08-9E38-7F580F5D53A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A829D9A1-5FFE-4179-A3F3-9468546CC548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A829D9A1-5FFE-4179-A3F3-9468546CC548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A829D9A1-5FFE-4179-A3F3-9468546CC548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A829D9A1-5FFE-4179-A3F3-9468546CC548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
