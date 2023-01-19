@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Timer.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        SizeToContent="WidthAndHeight"
+        x:Class="Timer.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Timer">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+	<Grid Margin="16">
+		<Grid.RowDefinitions>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		
+		<Label Padding="8" 
+			   HorizontalContentAlignment="Right" 
+			   VerticalContentAlignment="Center">Elapsed Time</Label>
+		<ProgressBar Grid.Column="1" 
+					 Minimum="0" 
+					 Maximum="{Binding MaxDuration}" 
+					 Value="{Binding Duration}" 
+					 ShowProgressText="True"
+					 ProgressTextFormat="{Binding Duration}"></ProgressBar>
+		<Label Content="{Binding MaxDuration, StringFormat=Duration ({0})}" 
+			   Grid.Row="1" 
+			   VerticalContentAlignment="Center" 
+			   Padding="8" 
+			   HorizontalContentAlignment="Right"></Label>
+		<Slider Grid.Row="1"
+				Grid.Column="1" 
+				Minimum="0" 
+				Maximum="100" 
+				Value="{Binding MaxDuration}"></Slider>
+		<Button Command="{Binding ResetCommand}" 
+				Grid.Row="2" 
+				Grid.ColumnSpan="2" 
+				HorizontalAlignment="Center">Reset</Button>
+	</Grid>
+</Window>
