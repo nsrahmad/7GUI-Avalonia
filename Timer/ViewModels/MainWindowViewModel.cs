@@ -1,4 +1,6 @@
-﻿using System.Timers;
+﻿using System;
+
+using Avalonia.Threading;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -6,13 +8,11 @@ using CommunityToolkit.Mvvm.Input;
 namespace Timer.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly System.Timers.Timer aTimer;
+    private readonly DispatcherTimer aTimer;
 
     public MainWindowViewModel()
     {
-        aTimer = new(1000);
-        aTimer.Elapsed += OnTimedEvent;
-        aTimer.AutoReset = true;
+        aTimer = new(new TimeSpan(0, 0, 1), DispatcherPriority.MaxValue, new EventHandler(OnTimedEvent));
         aTimer.Start();
     }
 
@@ -22,7 +22,7 @@ public partial class MainWindowViewModel : ObservableObject
     partial void OnMaxDurationChanged(int value)
     {
         if (maxDuration < Duration) Duration = 0;
-        if (aTimer.Enabled) aTimer.Stop();
+        if (aTimer.IsEnabled) aTimer.Stop();
         aTimer.Start();
     }
 
@@ -33,10 +33,10 @@ public partial class MainWindowViewModel : ObservableObject
     private void OnReset()
     {
         Duration = 0;
-        aTimer.Stop();
+        aTimer.Start();
     }
 
-    private void OnTimedEvent(object? source, ElapsedEventArgs e)
+    private void OnTimedEvent(object? source, EventArgs e)
     {
         if (Duration < MaxDuration)
         {

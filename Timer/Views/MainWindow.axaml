@@ -3,8 +3,10 @@
         xmlns:vm="using:Timer.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        SizeToContent="WidthAndHeight"
+        xmlns:local="clr-namespace:Timer.Infrastructure"
+		SizeToContent="WidthAndHeight"
         x:Class="Timer.Views.MainWindow"
+		x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Timer">
 
@@ -14,39 +16,37 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<Grid Margin="16">
-		<Grid.RowDefinitions>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-			<RowDefinition></RowDefinition>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-		
-		<Label Padding="8" 
-			   HorizontalContentAlignment="Right" 
+	<Grid Margin="16" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto, Auto">
+		<Label Padding="8"
+			   HorizontalContentAlignment="Right"
 			   VerticalContentAlignment="Center">Elapsed Time</Label>
-		<ProgressBar Grid.Column="1" 
-					 Minimum="0" 
-					 Maximum="{Binding MaxDuration}" 
-					 Value="{Binding Duration}" 
+		<ProgressBar Grid.Column="1"
+					 Minimum="0"
+					 Maximum="{CompiledBinding MaxDuration}"
+					 local:ProgressBarWorkaround.Value="{CompiledBinding Duration}"
 					 ShowProgressText="True"
-					 ProgressTextFormat="{Binding Duration}"></ProgressBar>
-		<Label Content="{Binding MaxDuration, StringFormat=Duration ({0})}" 
-			   Grid.Row="1" 
-			   VerticalContentAlignment="Center" 
-			   Padding="8" 
+					 ProgressTextFormat="{CompiledBinding Duration, StringFormat={}{0} sec}">
+			<ProgressBar.Transitions>
+				<Transitions>
+					<DoubleTransition
+						  Property="(local:ProgressBarWorkaround.Value)"
+						  Duration="0:0:1" />
+				</Transitions>
+			</ProgressBar.Transitions>
+		</ProgressBar>
+		<Label Content="{CompiledBinding MaxDuration, StringFormat=Duration ({0} sec)}"
+			   Grid.Row="1"
+			   VerticalContentAlignment="Center"
+			   Padding="8"
 			   HorizontalContentAlignment="Right"></Label>
 		<Slider Grid.Row="1"
-				Grid.Column="1" 
-				Minimum="0" 
-				Maximum="100" 
-				Value="{Binding MaxDuration}"></Slider>
-		<Button Command="{Binding ResetCommand}" 
-				Grid.Row="2" 
-				Grid.ColumnSpan="2" 
+				Grid.Column="1"
+				Minimum="0"
+				Maximum="100"
+				Value="{CompiledBinding MaxDuration}"></Slider>
+		<Button Command="{CompiledBinding ResetCommand}"
+				Grid.Row="2"
+				Grid.ColumnSpan="2"
 				HorizontalAlignment="Center">Reset</Button>
 	</Grid>
 </Window>
