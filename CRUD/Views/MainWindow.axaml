@@ -1,0 +1,82 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CRUD.ViewModels"
+        MinWidth="550" MinHeight="300"
+        SizeToContent="WidthAndHeight"
+        x:Class="CRUD.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="CRUD">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+	<DockPanel Margin="8">
+		<StackPanel Orientation="Horizontal" 
+		            DockPanel.Dock="Bottom" 
+		            HorizontalAlignment="Center" 
+		            Margin="8,8,8,0" 
+		            Spacing="8">
+			<Button Command="{Binding CreateCommand}">Create</Button>
+			<Button Command="{Binding UpdateCommand}">Update</Button>
+			<Button Command="{Binding DeleteCommand}">Delete</Button>
+		</StackPanel>
+		<Grid DockPanel.Dock="Right" 
+		      RowDefinitions="Auto,Auto" 
+		      ColumnDefinitions="Auto,Auto" 
+		      Margin="8,0,0,0">
+			<Label Grid.Column="0" 
+			       Grid.Row="0" 
+			       HorizontalContentAlignment="Right" 
+			       VerticalContentAlignment="Center">
+				Name
+			</Label>
+			<TextBox Margin="8,0,0,0" 
+			         Grid.Column="1" 
+			         Grid.Row="0" 
+			         MinWidth="150" 
+			         Text="{Binding TbName ,FallbackValue=''}">
+			</TextBox>
+			<Label Margin="0,8,0,0" 
+			       Grid.Column="0" 
+			       Grid.Row="1" 
+			       VerticalContentAlignment="Center">
+				Surname
+			</Label>
+			<TextBox Margin="8,8,0,0" 
+			         Grid.Column="1" 
+			         Grid.Row="1" 
+			         MinWidth="150"
+			         Text="{Binding TbSurName ,FallbackValue=''}">
+			</TextBox>
+		</Grid>
+		<DockPanel LastChildFill="True">
+			<DockPanel DockPanel.Dock="Top" 
+			           LastChildFill="True">
+				<Label DockPanel.Dock="Left" 
+				       Margin="0,0,0,8" 
+				       VerticalContentAlignment="Center">
+					Filter Prefix
+				</Label>
+				<TextBox Margin="8,0,0,8"></TextBox>
+			</DockPanel>
+			<ListBox MinWidth="300" 
+			         Items="{Binding Contacts}"
+					 SelectionMode="AlwaysSelected"
+			         SelectedItem="{Binding SelectedContact}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock>
+							<Run Text="{Binding SurName, StringFormat={}{0}\,}" />
+							<Run Text="{Binding Name}" />
+						</TextBlock>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+	</DockPanel>
+
+</Window>

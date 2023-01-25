@@ -12,7 +12,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
-        aTimer = new(new TimeSpan(0, 0, 1), DispatcherPriority.MaxValue, new EventHandler(OnTimedEvent));
+        aTimer = new(new TimeSpan(0,0,1), DispatcherPriority.Render, new EventHandler(OnTimedEvent));
         aTimer.Start();
     }
 
