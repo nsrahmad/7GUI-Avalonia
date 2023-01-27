@@ -61,7 +61,7 @@
 				       VerticalContentAlignment="Center">
 					Filter Prefix
 				</Label>
-				<TextBox Margin="8,0,0,8"></TextBox>
+				<TextBox Margin="8,0,0,8" Text="{Binding FilterString}"></TextBox>
 			</DockPanel>
 			<ListBox MinWidth="300" 
 			         Items="{Binding Contacts}"

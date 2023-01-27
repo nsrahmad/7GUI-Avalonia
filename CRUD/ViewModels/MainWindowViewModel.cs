@@ -1,6 +1,4 @@
-﻿using System;
-
-using Avalonia.Collections;
+﻿using Avalonia.Collections;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,14 +7,31 @@ namespace CRUD.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private AvaloniaList<ContactViewModel> contacts = new()
+    public MainWindowViewModel()
     {
-        new ("Hans", "Emil"),
-        new ("Max", "Mustermann"),
-        new ("Roman", "Tisch"),
-    };
-    
+        _backingContacts = new()
+        {
+            new ("Hans", "Emil"),
+            new ("Max", "Mustermann"),
+            new ("Roman", "Tisch"),
+        };
+        contacts = new AvaloniaList<ContactViewModel>();
+        UpdateContactsList();
+    }
+
+    private void UpdateContactsList()
+    {
+        foreach (ContactViewModel c in _backingContacts)
+        {
+            if (c.SurName!.StartsWith(FilterString ?? "", System.StringComparison.OrdinalIgnoreCase)) contacts.Add(c);
+        }
+    }
+
+    private readonly AvaloniaList<ContactViewModel> _backingContacts;
+
+    [ObservableProperty]
+    private AvaloniaList<ContactViewModel> contacts;
+
     [ObservableProperty]
     private ContactViewModel? selectedContact;
 
@@ -35,10 +50,23 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private string? tbSurName;
 
+    [ObservableProperty]
+    private string? filterString = "m";
+
+    partial void OnFilterStringChanged(string? value)
+    {
+        Contacts.Clear();
+        UpdateContactsList();
+    }
+
     [RelayCommand]
     private void OnDelete()
     {
-        if (SelectedContact != null) Contacts.Remove(SelectedContact);
+        if (SelectedContact != null)
+        {
+            _ = Contacts.Remove(SelectedContact);
+            _ = _backingContacts.Remove(SelectedContact);
+        }
     }
 
     [RelayCommand]
@@ -54,6 +82,11 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void OnCreate()
     {
-        if (TbName != null && TbSurName != null) Contacts.Add(new ContactViewModel(TbName, TbSurName));
+        if (TbName != null && TbSurName != null)
+        {
+            ContactViewModel c = new(TbName, TbSurName);
+            Contacts.Add(c);
+            _backingContacts.Add(c);
+        }
     }
 }
