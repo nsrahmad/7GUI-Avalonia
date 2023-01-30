@@ -1,4 +1,8 @@
-﻿using Avalonia.Collections;
+﻿using System.IO;
+
+using Avalonia;
+using Avalonia.Collections;
+using Avalonia.Platform;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,13 +13,19 @@ public partial class MainWindowViewModel : ObservableObject
 {
     public MainWindowViewModel()
     {
-        _backingContacts = new()
+        _backingContacts = new();
+        IAssetLoader? assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        using (Stream contanctsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv")))
+        using (StreamReader reader = new(contanctsOnDisk))
         {
-            new ("Hans", "Emil"),
-            new ("Max", "Mustermann"),
-            new ("Roman", "Tisch"),
-        };
-        contacts = new AvaloniaList<ContactViewModel>();
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] contact = line.Split(',');
+                _backingContacts.Add(new ContactViewModel(contact[0], contact[1]));
+            }
+        }
+        contacts = new();
         UpdateContactsList();
     }
 
@@ -23,7 +33,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         foreach (ContactViewModel c in _backingContacts)
         {
-            if (c.SurName!.StartsWith(FilterString ?? "", System.StringComparison.OrdinalIgnoreCase)) contacts.Add(c);
+            if (c.SurName!.StartsWith(FilterString ?? "", System.StringComparison.OrdinalIgnoreCase)) Contacts.Add(c);
         }
     }
 
