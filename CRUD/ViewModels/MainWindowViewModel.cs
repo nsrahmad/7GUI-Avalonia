@@ -19,9 +19,6 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     public MainWindowViewModel()
     {
-        filter = new BehaviorSubject<Func<ObservableContact, bool>>(CreateFilter());
-
-        backingContacts = new();
         backingContacts.AddRange(LoadData());
 
         list = backingContacts.Connect()
@@ -29,17 +26,18 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             .Bind(out contacts)
             .DisposeMany()
             .Subscribe();
+
+        filter.OnNext(CreateFilter());
     }
 
     private readonly IDisposable list;
-    private readonly BehaviorSubject<Func<ObservableContact, bool>> filter;
-    private readonly SourceList<ObservableContact> backingContacts;
+    private readonly Subject<Func<ObservableContact, bool>> filter = new();
+    private readonly SourceList<ObservableContact> backingContacts = new();
 
     private Func<ObservableContact, bool> CreateFilter() => c => c.SurName.StartsWith(FilterString, StringComparison.OrdinalIgnoreCase);
 
-
-    [ObservableProperty]
-    private ReadOnlyObservableCollection<ObservableContact> contacts;
+    private readonly ReadOnlyObservableCollection<ObservableContact> contacts;
+    public ReadOnlyObservableCollection<ObservableContact> Contacts => contacts;
 
     [ObservableProperty]
     private ObservableContact? selectedContact;
