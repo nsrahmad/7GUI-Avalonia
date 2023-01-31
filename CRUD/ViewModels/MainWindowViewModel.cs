@@ -19,8 +19,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     public MainWindowViewModel()
     {
-        filter = new ReplaySubject<Func<ObservableContact, bool>>(1);
-        filter.OnNext(CreateFilter());
+        filter = new BehaviorSubject<Func<ObservableContact, bool>>(CreateFilter());
 
         backingContacts = new();
         backingContacts.AddRange(LoadData());
@@ -33,11 +32,11 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     }
 
     private readonly IDisposable list;
-    private readonly ReplaySubject<Func<ObservableContact, bool>> filter;
+    private readonly BehaviorSubject<Func<ObservableContact, bool>> filter;
+    private readonly SourceList<ObservableContact> backingContacts;
 
     private Func<ObservableContact, bool> CreateFilter() => c => c.SurName.StartsWith(FilterString, StringComparison.OrdinalIgnoreCase);
 
-    private readonly SourceList<ObservableContact> backingContacts;
 
     [ObservableProperty]
     private ReadOnlyObservableCollection<ObservableContact> contacts;
