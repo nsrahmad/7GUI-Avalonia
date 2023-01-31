@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Subjects;
@@ -91,19 +92,17 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         }
     }
 
-    private static ObservableContact[] LoadData()
+    private static List<ObservableContact> LoadData()
     {
         IAssetLoader? assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
         using Stream contactsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv"));
         using StreamReader reader = new(contactsOnDisk);
+        List<ObservableContact> contacts = new();
         string? line;
-        ObservableContact[] contacts = new ObservableContact[1000];
-        int idx = 0;
         while ((line = reader.ReadLine()) != null)
         {
             string[] contact = line.Split(',');
-            contacts[idx] = new ObservableContact(contact[0], contact[1]);
-            idx++;
+            contacts.Add(new ObservableContact(contact[0], contact[1]));
         }
         return contacts;
     }
