@@ -1,51 +1,51 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Reactive.Subjects;
 
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Platform;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using CRUD.Models;
+
+using DynamicData;
+
 namespace CRUD.ViewModels;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     public MainWindowViewModel()
     {
-        _backingContacts = new();
-        IAssetLoader? assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        using (Stream contanctsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv")))
-        using (StreamReader reader = new(contanctsOnDisk))
-        {
-            string? line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                string[] contact = line.Split(',');
-                _backingContacts.Add(new ContactViewModel(contact[0], contact[1]));
-            }
-        }
-        contacts = new();
-        UpdateContactsList();
+        filter = new ReplaySubject<Func<ObservableContact, bool>>(1);
+        filter.OnNext(CreateFilter());
+
+        backingContacts = new();
+        backingContacts.AddRange(LoadData());
+
+        list = backingContacts.Connect()
+            .Filter(filter)
+            .Bind(out contacts)
+            .DisposeMany()
+            .Subscribe();
     }
 
-    private void UpdateContactsList()
-    {
-        foreach (ContactViewModel c in _backingContacts)
-        {
-            if (c.SurName!.StartsWith(FilterString ?? "", System.StringComparison.OrdinalIgnoreCase)) Contacts.Add(c);
-        }
-    }
+    private readonly IDisposable list;
+    private readonly ReplaySubject<Func<ObservableContact, bool>> filter;
 
-    private readonly AvaloniaList<ContactViewModel> _backingContacts;
+    private Func<ObservableContact, bool> CreateFilter() => c => c.SurName.StartsWith(FilterString, StringComparison.OrdinalIgnoreCase);
+
+    private readonly SourceList<ObservableContact> backingContacts;
 
     [ObservableProperty]
-    private AvaloniaList<ContactViewModel> contacts;
+    private ReadOnlyObservableCollection<ObservableContact> contacts;
 
     [ObservableProperty]
-    private ContactViewModel? selectedContact;
+    private ObservableContact? selectedContact;
 
-    partial void OnSelectedContactChanged(ContactViewModel? value)
+    partial void OnSelectedContactChanged(ObservableContact? value)
     {
         if (value != null)
         {
@@ -61,28 +61,23 @@ public partial class MainWindowViewModel : ObservableObject
     private string? tbSurName;
 
     [ObservableProperty]
-    private string? filterString = "m";
+    private string filterString = string.Empty;
 
-    partial void OnFilterStringChanged(string? value)
-    {
-        Contacts.Clear();
-        UpdateContactsList();
-    }
+    partial void OnFilterStringChanged(string value) => filter.OnNext(CreateFilter());
 
     [RelayCommand]
     private void OnDelete()
     {
         if (SelectedContact != null)
         {
-            _ = Contacts.Remove(SelectedContact);
-            _ = _backingContacts.Remove(SelectedContact);
+            _ = backingContacts.Remove(SelectedContact);
         }
     }
 
     [RelayCommand]
     private void OnUpdate()
     {
-        if (SelectedContact != null)
+        if (SelectedContact != null && TbName != null && TbSurName != null)
         {
             SelectedContact.Name = TbName;
             SelectedContact.SurName = TbSurName;
@@ -94,9 +89,32 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (TbName != null && TbSurName != null)
         {
-            ContactViewModel c = new(TbName, TbSurName);
-            Contacts.Add(c);
-            _backingContacts.Add(c);
+            ObservableContact c = new(TbName, TbSurName);
+            backingContacts.Add(c);
         }
+    }
+
+    private static ObservableContact[] LoadData()
+    {
+        IAssetLoader? assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        using Stream contactsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv"));
+        using StreamReader reader = new(contactsOnDisk);
+        string? line;
+        ObservableContact[] contacts = new ObservableContact[1000];
+        int idx = 0;
+        while ((line = reader.ReadLine()) != null)
+        {
+            string[] contact = line.Split(',');
+            contacts[idx] = new ObservableContact(contact[0], contact[1]);
+            idx++;
+        }
+        return contacts;
+    }
+
+    public void Dispose()
+    {
+        list.Dispose();
+        filter.Dispose();
+        backingContacts.Dispose();
     }
 }
