@@ -65,7 +65,6 @@
 			</DockPanel>
 			<ListBox MinWidth="300" 
 			         Items="{Binding Contacts}"
-					 SelectionMode="AlwaysSelected"
 			         SelectedItem="{Binding SelectedContact}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>

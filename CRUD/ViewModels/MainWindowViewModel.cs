@@ -41,6 +41,8 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     public ReadOnlyObservableCollection<ObservableContact> Contacts => contacts;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
+    [NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
     private ObservableContact? selectedContact;
 
     partial void OnSelectedContactChanged(ObservableContact? value)
@@ -53,43 +55,43 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     }
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CreateCommand))]
     private string? tbName;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CreateCommand))]
     private string? tbSurName;
+
+    private bool IsNameNotNull => !string.IsNullOrWhiteSpace(TbName) && !string.IsNullOrWhiteSpace(TbSurName);
 
     [ObservableProperty]
     private string filterString = string.Empty;
 
     partial void OnFilterStringChanged(string value) => filter.OnNext(CreateFilter());
 
-    [RelayCommand]
+    private bool IsSelectedContact => SelectedContact != null;
+
+    [RelayCommand(CanExecute = nameof(IsSelectedContact))]
     private void OnDelete()
     {
-        if (SelectedContact != null)
-        {
-            _ = backingContacts.Remove(SelectedContact);
-        }
+        _ = backingContacts.Remove(SelectedContact!);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsSelectedContact))]
     private void OnUpdate()
     {
-        if (SelectedContact != null && TbName != null && TbSurName != null)
+        if (TbName != null && TbSurName != null)
         {
-            SelectedContact.Name = TbName;
+            SelectedContact!.Name = TbName;
             SelectedContact.SurName = TbSurName;
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsNameNotNull))]
     private void OnCreate()
     {
-        if (TbName != null && TbSurName != null)
-        {
-            ObservableContact c = new(TbName, TbSurName);
-            backingContacts.Add(c);
-        }
+        // We are sure TbName and TbSurName can not be null here
+        backingContacts.Add(new ObservableContact(TbName!, TbSurName!));
     }
 
     private static List<ObservableContact> LoadData()
