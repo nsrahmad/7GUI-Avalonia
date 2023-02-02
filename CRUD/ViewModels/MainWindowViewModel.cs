@@ -43,11 +43,9 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     partial void OnSelectedContactChanged(ObservableContact? value)
     {
-        if (value != null)
-        {
-            TbName = value.Name;
-            TbSurName = value.SurName;
-        }
+        if (value == null) return;
+        TbName = value.Name;
+        TbSurName = value.SurName;
     }
 
     [ObservableProperty]
