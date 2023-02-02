@@ -20,9 +20,9 @@
 		            HorizontalAlignment="Center" 
 		            Margin="8,8,8,0" 
 		            Spacing="8">
-			<Button Command="{Binding CreateCommand}">Create</Button>
-			<Button Command="{Binding UpdateCommand}">Update</Button>
-			<Button Command="{Binding DeleteCommand}">Delete</Button>
+			<Button Command="{CompiledBinding CreateCommand}">Create</Button>
+			<Button Command="{CompiledBinding UpdateCommand}">Update</Button>
+			<Button Command="{CompiledBinding DeleteCommand}">Delete</Button>
 		</StackPanel>
 		<Grid DockPanel.Dock="Right" 
 		      RowDefinitions="Auto,Auto" 
@@ -38,7 +38,7 @@
 			         Grid.Column="1" 
 			         Grid.Row="0" 
 			         MinWidth="150" 
-			         Text="{Binding TbName ,FallbackValue=''}">
+			         Text="{CompiledBinding TbName ,FallbackValue=''}">
 			</TextBox>
 			<Label Margin="0,8,0,0" 
 			       Grid.Column="0" 
@@ -50,7 +50,7 @@
 			         Grid.Column="1" 
 			         Grid.Row="1" 
 			         MinWidth="150"
-			         Text="{Binding TbSurName ,FallbackValue=''}">
+			         Text="{CompiledBinding TbSurName ,FallbackValue=''}">
 			</TextBox>
 		</Grid>
 		<DockPanel LastChildFill="True">
@@ -61,16 +61,16 @@
 				       VerticalContentAlignment="Center">
 					Filter Prefix
 				</Label>
-				<TextBox Margin="8,0,0,8" Text="{Binding FilterString}"></TextBox>
+				<TextBox Margin="8,0,0,8" Text="{CompiledBinding FilterString}"></TextBox>
 			</DockPanel>
 			<ListBox MinWidth="300" 
-			         Items="{Binding Contacts}"
-			         SelectedItem="{Binding SelectedContact}">
+			         Items="{CompiledBinding Contacts}"
+			         SelectedItem="{CompiledBinding SelectedContact}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock>
-							<Run Text="{Binding SurName, StringFormat={}{0}\,}" />
-							<Run Text="{Binding Name}" />
+							<Run Text="{CompiledBinding SurName, StringFormat={}{0}\,}" />
+							<Run Text="{CompiledBinding Name}" />
 						</TextBlock>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
