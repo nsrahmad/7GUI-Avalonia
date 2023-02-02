@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Reactive.Subjects;
+using System.Reactive.Linq;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,8 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CRUD.Models;
 
 using DynamicData;
-
-using static CRUD.Infrastructure.Utils;
+using DynamicData.Binding;
 
 namespace CRUD.ViewModels;
 
@@ -17,22 +16,22 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     public MainWindowViewModel()
     {
-        backingContacts.AddRange(LoadData());
+        backingContacts.AddRange(Infrastructure.Utils.LoadData());
+
+        IObservable<Func<ObservableContact, bool>> dynamicFilter = this.WhenValueChanged(@this => @this.FilterString).Select(CreateFilter!);
 
         list = backingContacts.Connect()
-            .Filter(filter)
+            .Filter(dynamicFilter)
+            .Sort(SortExpressionComparer<ObservableContact>.Ascending(c => c.SurName))
             .Bind(out contacts)
             .DisposeMany()
             .Subscribe();
-
-        filter.OnNext(CreateFilter());
     }
 
     private readonly IDisposable list;
-    private readonly Subject<Func<ObservableContact, bool>> filter = new();
     private readonly SourceList<ObservableContact> backingContacts = new();
 
-    private Func<ObservableContact, bool> CreateFilter() => c => c.SurName.StartsWith(FilterString, StringComparison.OrdinalIgnoreCase);
+    private static Func<ObservableContact, bool> CreateFilter(string filter) => c => c.SurName.StartsWith(filter, StringComparison.OrdinalIgnoreCase);
 
     private readonly ReadOnlyObservableCollection<ObservableContact> contacts;
     public ReadOnlyObservableCollection<ObservableContact> Contacts => contacts;
@@ -64,9 +63,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private string filterString = string.Empty;
 
-    // ReSharper disable once UnusedParameterInPartialMethod
-    partial void OnFilterStringChanged(string value) => filter.OnNext(CreateFilter());
-
     private bool IsSelectedContact => SelectedContact != null;
 
     [RelayCommand(CanExecute = nameof(IsSelectedContact))]
@@ -88,7 +84,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     public void Dispose()
     {
         list.Dispose();
-        filter.Dispose();
         backingContacts.Dispose();
     }
 }
