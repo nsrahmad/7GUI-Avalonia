@@ -29,7 +29,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     }
 
     private readonly IDisposable list;
-    private bool disposedValue;
     private readonly Subject<Func<ObservableContact, bool>> filter = new();
     private readonly SourceList<ObservableContact> backingContacts = new();
 
@@ -86,23 +85,10 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     [RelayCommand(CanExecute = nameof(IsNameNotNull))]
     private void OnCreate() => backingContacts.Add(new ObservableContact(TbName!, TbSurName!));
 
-    private void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                backingContacts.Dispose();
-                list.Dispose();
-                filter.Dispose();
-            }
-            disposedValue = true;
-        }
-    }
-
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        list.Dispose();
+        filter.Dispose();
+        backingContacts.Dispose();
     }
 }
