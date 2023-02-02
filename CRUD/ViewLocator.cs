@@ -7,9 +7,9 @@ using Avalonia.Controls.Templates;
 namespace CRUD;
 public class ViewLocator : IDataTemplate
 {
-    public IControl Build(object data)
+    public IControl Build(object? data)
     {
-        var name = data.GetType().FullName!.Replace("ViewModel", "View");
+        var name = data!.GetType().FullName!.Replace("ViewModel", "View");
         var type = Type.GetType(name);
 
         if (type != null)
@@ -20,7 +20,7 @@ public class ViewLocator : IDataTemplate
         return new TextBlock { Text = "Not Found: " + name };
     }
 
-    public bool Match(object data)
+    public bool Match(object? data)
     {
 
         return data is INotifyPropertyChanged;
