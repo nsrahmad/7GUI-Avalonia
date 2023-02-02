@@ -12,7 +12,7 @@ public class FahrenheitConverter : IValueConverter
     {
         if (value != null)
         {
-            decimal result = ((decimal)value - 32M) * (5M / 9M);
+            var result = ((decimal)value - 32M) * (5M / 9M);
             return decimal.Round(result, 1);
         }
         return 0m;

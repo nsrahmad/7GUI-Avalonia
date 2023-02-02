@@ -13,7 +13,7 @@ using static CRUD.Infrastructure.Utils;
 
 namespace CRUD.ViewModels;
 
-public partial class MainWindowViewModel : ObservableObject, IDisposable
+public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     public MainWindowViewModel()
     {
@@ -86,7 +86,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     [RelayCommand(CanExecute = nameof(IsNameNotNull))]
     private void OnCreate() => backingContacts.Add(new ObservableContact(TbName!, TbSurName!));
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!disposedValue)
         {

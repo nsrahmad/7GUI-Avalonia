@@ -11,14 +11,14 @@ internal static class Utils
 {
     public static List<ObservableContact> LoadData()
     {
-        IAssetLoader? assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        using Stream contactsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv"));
+        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        using var contactsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv"));
         using StreamReader reader = new(contactsOnDisk);
         List<ObservableContact> contacts = new();
-        string? line;
-        while ((line = reader.ReadLine()) != null)
+
+        while (reader.ReadLine() is { } line)
         {
-            string[] contact = line.Split(',');
+            var contact = line.Split(',');
             contacts.Add(new ObservableContact(contact[0], contact[1]));
         }
         return contacts;
