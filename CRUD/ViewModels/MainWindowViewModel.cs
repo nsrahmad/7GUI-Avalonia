@@ -18,7 +18,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         backingContacts.AddRange(Infrastructure.Utils.LoadData());
 
-        IObservable<Func<ObservableContact, bool>> dynamicFilter = this.WhenValueChanged(@this => @this.FilterString).Select(CreateFilter!);
+        var dynamicFilter = this.WhenValueChanged(@this => @this.FilterString).Select(CreateFilter!);
 
         list = backingContacts.Connect()
             .Filter(dynamicFilter)
