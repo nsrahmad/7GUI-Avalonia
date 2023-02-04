@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightBooker", "FlightBooke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timer", "Timer\Timer.csproj", "{60E52058-21C2-44E9-B024-6EEBFE8F7C50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUD", "CRUD\CRUD.csproj", "{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRUD", "CRUD\CRUD.csproj", "{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{60E52058-21C2-44E9-B024-6EEBFE8F7C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60E52058-21C2-44E9-B024-6EEBFE8F7C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60E52058-21C2-44E9-B024-6EEBFE8F7C50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5D3156F-574E-4BAA-8BF6-237F82DB8AED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
