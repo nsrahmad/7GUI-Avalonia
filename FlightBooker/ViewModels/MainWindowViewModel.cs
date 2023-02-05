@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace FlightBooker.ViewModels;
+
 public partial class MainWindowViewModel : ObservableValidator
 {
     [ObservableProperty]
@@ -40,7 +41,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
     public static ValidationResult ValidateReturnFlightDate(DateTime? returnFlightDate, ValidationContext context)
     {
-        var instance = (MainWindowViewModel)context.ObjectInstance;
+        MainWindowViewModel instance = (MainWindowViewModel)context.ObjectInstance;
 
         return instance.SelectedFlightType.Equals("one-way flight")
             ? ValidationResult.Success!
