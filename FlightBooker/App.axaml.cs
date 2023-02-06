@@ -1,10 +1,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using static Avalonia.Data.Core.Plugins.BindingPlugins;
 
 using FlightBooker.ViewModels;
 using FlightBooker.Views;
+
+using static Avalonia.Data.Core.Plugins.BindingPlugins;
 
 namespace FlightBooker;
 public partial class App : Application
@@ -13,10 +14,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        for(var plugin = 0; plugin < DataValidators.Count; plugin++)
-        {
-            DataValidators.RemoveAt(plugin);
-        }
+        DataValidators.RemoveAt(0);
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
