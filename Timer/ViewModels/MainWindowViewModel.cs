@@ -12,7 +12,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
-        aTimer = new(new TimeSpan(0,0,1), DispatcherPriority.Render, new EventHandler(OnTimedEvent));
+        aTimer = new(new TimeSpan(0, 0, 1), DispatcherPriority.Render, new EventHandler(OnTimedEvent));
         aTimer.Start();
     }
 
@@ -21,7 +21,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     partial void OnMaxDurationChanged(int value)
     {
-        if (maxDuration < Duration) Duration = 0;
+        if (MaxDuration < Duration) Duration = 0;
         if (aTimer.IsEnabled) aTimer.Stop();
         aTimer.Start();
     }
