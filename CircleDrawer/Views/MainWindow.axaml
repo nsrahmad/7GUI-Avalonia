@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CircleDrawer.ViewModels"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+        x:Class="CircleDrawer.Views.MainWindow"
+		x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="CircleDraw">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+	<DockPanel Margin="8">
+	    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0,0,0,8">
+		    <Button>Undo</Button>
+		    <Button>Redo</Button>
+	    </StackPanel>
+		<Border BorderThickness="1" BorderBrush="Black">
+			<ItemsControl Items="{CompiledBinding Circles}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Canvas Name="Canvas" Background="Transparent">
+							<i:Interaction.Behaviors>
+								<ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Canvas">
+									<ia:InvokeCommandAction Command="{CompiledBinding AddCircleCommand}" 
+									                        PassEventArgsToCommand="True"/>
+								</ia:EventTriggerBehavior>
+							</i:Interaction.Behaviors>
+						</Canvas>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.Styles>
+					 <Style Selector="ContentPresenter" x:DataType="vm:CircleViewModel">
+						<Setter Property="Canvas.Left" Value="{CompiledBinding X}" />
+						<Setter Property="Canvas.Top" Value="{CompiledBinding Y}" />
+					 </Style>
+				</ItemsControl.Styles>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Ellipse Name="Ellipse" Width="{CompiledBinding Diameter}" Height="{CompiledBinding Diameter}" Stroke="Black" StrokeThickness="1" Fill="{Binding FillColor}">
+							<i:Interaction.Behaviors>
+								<ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Ellipse">
+									<ia:ChangePropertyAction TargetObject="{CompiledBinding $parent[Window].DataContext}"
+									                         PropertyName="SelectedCircle"
+									                         Value="{CompiledBinding .}"></ia:ChangePropertyAction>
+								</ia:EventTriggerBehavior>
+							</i:Interaction.Behaviors>
+						</Ellipse>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Border>
+	</DockPanel>
+
+</Window>
