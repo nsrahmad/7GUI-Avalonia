@@ -50,6 +50,7 @@
 									<ia:ChangePropertyAction TargetObject="{CompiledBinding $parent[Window].DataContext}"
 									                         PropertyName="SelectedCircle"
 									                         Value="{CompiledBinding .}"></ia:ChangePropertyAction>
+							
 								</ia:EventTriggerBehavior>
 							</i:Interaction.Behaviors>
 						</Ellipse>
