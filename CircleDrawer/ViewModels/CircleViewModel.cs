@@ -14,5 +14,5 @@ public partial class CircleViewModel : ObservableObject
     public double CenterY { get; set; }
 
     [ObservableProperty]
-    private string fillColor = "White";
+    private bool isSelected;
 }

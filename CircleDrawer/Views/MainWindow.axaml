@@ -41,10 +41,21 @@
 						<Setter Property="Canvas.Left" Value="{CompiledBinding X}" />
 						<Setter Property="Canvas.Top" Value="{CompiledBinding Y}" />
 					 </Style>
+					<Style Selector="Ellipse.Selected">
+						<Setter Property="Fill" Value="SlateGray"></Setter>
+					</Style>
+					<Style Selector="Ellipse.NotSelected">
+						<Setter Property="Fill" Value="White"></Setter>
+					</Style>
 				</ItemsControl.Styles>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Ellipse Name="Ellipse" Width="{CompiledBinding Diameter}" Height="{CompiledBinding Diameter}" Stroke="Black" StrokeThickness="1" Fill="{Binding FillColor}">
+						<Ellipse Name="Ellipse" Width="{CompiledBinding Diameter}" 
+						         Height="{CompiledBinding Diameter}" 
+						         Stroke="Black" 
+						         StrokeThickness="1"
+						         Classes.NotSelected="{CompiledBinding !IsSelected}"
+						         Classes.Selected="{CompiledBinding IsSelected}">
 							<i:Interaction.Behaviors>
 								<ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Ellipse">
 									<ia:ChangePropertyAction TargetObject="{CompiledBinding $parent[Window].DataContext}"

@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -15,14 +14,14 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private CircleViewModel? selectedCircle;
 
-    partial void OnSelectedCircleChanged(CircleViewModel? value)
+    partial void OnSelectedCircleChanging(CircleViewModel? value)
     {
-        foreach (CircleViewModel circle in Circles.Where(circle => circle.FillColor.Equals("LightGray")))
-        {
-            circle.FillColor = "White";
-        }
-        if (value != null) value.FillColor = "LightGray";
+        _ = value;
+        if (SelectedCircle == null) return;
+        SelectedCircle.IsSelected = false;
     }
+
+    partial void OnSelectedCircleChanged(CircleViewModel? value) => value!.IsSelected = true;
 
     [RelayCommand]
     private void OnAddCircle(PointerPressedEventArgs e)
