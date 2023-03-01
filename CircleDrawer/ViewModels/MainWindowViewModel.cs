@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 
@@ -10,21 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 namespace CircleDrawer.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
-    public AvaloniaList<CircleViewModel> Circles { get; } = new()
-    {
-        new CircleViewModel()
-        {
-            Diameter = 200, CenterX = 0, CenterY = 0,
-        },
-        new CircleViewModel()
-        {
-            Diameter = 100, CenterX = 0, CenterY = 0,
-        },
-        new CircleViewModel()
-        {
-            Diameter = 50, CenterX = 0, CenterY = 0,
-        }
-    };
+    public ObservableCollection<CircleViewModel> Circles { get; } = new();
 
     [ObservableProperty]
     private CircleViewModel? selectedCircle;
