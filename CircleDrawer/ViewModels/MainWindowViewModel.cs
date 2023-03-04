@@ -1,7 +1,5 @@
-﻿using System.Collections.ObjectModel;
-
-using Avalonia.Controls;
-using Avalonia.Input;
+﻿using System;
+using System.Collections.ObjectModel;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -24,15 +22,13 @@ public partial class MainWindowViewModel : ObservableObject
     partial void OnSelectedCircleChanged(CircleViewModel? value) => value!.IsSelected = true;
 
     [RelayCommand]
-    private void OnAddCircle(PointerPressedEventArgs e)
+    private void OnAddCircle(Tuple<double, double>? coords)
     {
-        if (e.Source is Canvas canvas)
+        if (coords != null)
         {
             Circles.Add(new CircleViewModel()
             {
-                Diameter = 50,
-                CenterX = e.GetCurrentPoint(canvas).Position.X,
-                CenterY = e.GetCurrentPoint(canvas).Position.Y,
+                Diameter = 50, CenterX = coords.Item1, CenterY = coords.Item2,
             });
         }
     }
