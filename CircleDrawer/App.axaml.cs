@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 
 using CircleDrawer.ViewModels;
@@ -14,6 +15,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            BindingPlugins.DataValidators.RemoveAt(0);
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel(),
