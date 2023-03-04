@@ -24,12 +24,10 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void OnAddCircle(Tuple<double, double>? coords)
     {
-        if (coords != null)
+        if (coords == null) return;
+        Circles.Add(new CircleViewModel()
         {
-            Circles.Add(new CircleViewModel()
-            {
-                Diameter = 50, CenterX = coords.Item1, CenterY = coords.Item2,
-            });
-        }
+            Diameter = 50, CenterX = coords.Item1, CenterY = coords.Item2,
+        });
     }
 }
