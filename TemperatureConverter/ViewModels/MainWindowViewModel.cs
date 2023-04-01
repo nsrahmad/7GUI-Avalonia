@@ -4,5 +4,5 @@ namespace TemperatureConverter.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty]
-    private decimal temperatureCelsius;
+    private decimal? temperatureCelsius;
 }

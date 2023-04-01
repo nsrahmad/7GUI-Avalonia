@@ -63,12 +63,20 @@
 						         Classes.NotSelected="{CompiledBinding !IsSelected}"
 						         Classes.Selected="{CompiledBinding IsSelected}">
 							<i:Interaction.Behaviors>
-								<ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Ellipse">
+								<ia:EventTriggerBehavior EventName="Tapped" SourceObject="Ellipse">
 									<ia:ChangePropertyAction TargetObject="{CompiledBinding $parent[Window].DataContext}"
 									                         PropertyName="SelectedCircle"
 									                         Value="{CompiledBinding .}"></ia:ChangePropertyAction>
 								</ia:EventTriggerBehavior>
 							</i:Interaction.Behaviors>
+							<Ellipse.ContextMenu>
+								<ContextMenu>
+									<MenuItem Header="_Change Diameter"
+											  Command="{CompiledBinding ChangeDiameterCommand}"
+								              CommandParameter="{CompiledBinding .}" 
+											  IsEnabled="{CompiledBinding IsSelected}"/>
+								</ContextMenu>
+							</Ellipse.ContextMenu>
 						</Ellipse>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>

@@ -1,10 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace CircleDrawer.ViewModels;
 
 public partial class CircleViewModel : ObservableObject
 {
-    public double Diameter { get; set; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(X))]
+    [NotifyPropertyChangedFor(nameof(Y))]
+    private double diameter = 50;
 
     public double X => CenterX - (Diameter / 2.0);
 
@@ -15,4 +19,7 @@ public partial class CircleViewModel : ObservableObject
 
     [ObservableProperty]
     private bool isSelected;
+
+    [RelayCommand]
+    private void OnChangeDiameter(CircleViewModel circle) => circle.Diameter += 5;
 }

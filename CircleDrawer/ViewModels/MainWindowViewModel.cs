@@ -27,7 +27,9 @@ public partial class MainWindowViewModel : ObservableObject
         if (coords == null) return;
         Circles.Add(new CircleViewModel()
         {
-            Diameter = 50, CenterX = coords.Item1, CenterY = coords.Item2,
+            Diameter = 50,
+            CenterX = coords.Item1,
+            CenterY = coords.Item2,
         });
     }
 }
