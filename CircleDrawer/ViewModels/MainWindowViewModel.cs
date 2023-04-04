@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -11,7 +10,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private CircleViewModel? selectedCircle;
+    
+    [ObservableProperty] private bool isDialogOpen;
 
+    
     partial void OnSelectedCircleChanging(CircleViewModel? value)
     {
         _ = value;
@@ -31,5 +33,11 @@ public partial class MainWindowViewModel : ObservableObject
             CenterX = coords.Item1,
             CenterY = coords.Item2,
         });
+    }
+    
+    [RelayCommand]
+    private void OnShowDialog()
+    {
+        IsDialogOpen = true;
     }
 }

@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         xmlns:vm="using:CircleDrawer.ViewModels"
         xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
@@ -8,80 +9,95 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="CircleDrawer.Views.MainWindow"
-		x:DataType="vm:MainWindowViewModel"
+        x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="CircleDraw">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
-	
-	<Window.Resources>
-		<conv:MouseCoordinatesToTuple x:Key="MouseCoordinatesToTuple"></conv:MouseCoordinatesToTuple>
-	</Window.Resources>
 
-	<DockPanel Margin="8">
-	    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0,0,0,8">
-		    <Button>Undo</Button>
-		    <Button>Redo</Button>
-	    </StackPanel>
-		<Border BorderThickness="1" BorderBrush="Black">
-			<ItemsControl Items="{CompiledBinding Circles}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<Canvas Name="Canvas" Background="Transparent">
-							<i:Interaction.Behaviors>
-								<ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Canvas">
-									<ia:InvokeCommandAction Command="{CompiledBinding AddCircleCommand}"
-									                        InputConverter="{StaticResource MouseCoordinatesToTuple}"
-									                        PassEventArgsToCommand="True"/>
-								</ia:EventTriggerBehavior>
-							</i:Interaction.Behaviors>
-						</Canvas>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ItemsControl.Styles>
-					 <Style Selector="ContentPresenter" x:DataType="vm:CircleViewModel">
-						<Setter Property="Canvas.Left" Value="{CompiledBinding X}" />
-						<Setter Property="Canvas.Top" Value="{CompiledBinding Y}" />
-					 </Style>
-					<Style Selector="Ellipse.Selected">
-						<Setter Property="Fill" Value="SlateGray"></Setter>
-					</Style>
-					<Style Selector="Ellipse.NotSelected">
-						<Setter Property="Fill" Value="White"></Setter>
-					</Style>
-				</ItemsControl.Styles>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Ellipse Name="Ellipse" Width="{CompiledBinding Diameter}" 
-						         Height="{CompiledBinding Diameter}" 
-						         Stroke="Black" 
-						         StrokeThickness="1"
-						         Classes.NotSelected="{CompiledBinding !IsSelected}"
-						         Classes.Selected="{CompiledBinding IsSelected}">
-							<i:Interaction.Behaviors>
-								<ia:EventTriggerBehavior EventName="Tapped" SourceObject="Ellipse">
-									<ia:ChangePropertyAction TargetObject="{CompiledBinding $parent[Window].DataContext}"
-									                         PropertyName="SelectedCircle"
-									                         Value="{CompiledBinding .}"></ia:ChangePropertyAction>
-								</ia:EventTriggerBehavior>
-							</i:Interaction.Behaviors>
-							<Ellipse.ContextMenu>
-								<ContextMenu>
-									<MenuItem Header="_Change Diameter"
-											  Command="{CompiledBinding ChangeDiameterCommand}"
-								              CommandParameter="{CompiledBinding .}" 
-											  IsEnabled="{CompiledBinding IsSelected}"/>
-								</ContextMenu>
-							</Ellipse.ContextMenu>
-						</Ellipse>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</Border>
-	</DockPanel>
+    <Window.Resources>
+        <conv:MouseCoordinatesToTuple x:Key="MouseCoordinatesToTuple"></conv:MouseCoordinatesToTuple>
+    </Window.Resources>
+
+    <dialogHost:DialogHost CloseOnClickAway="True"
+                           IsOpen="{CompiledBinding IsDialogOpen, Mode=TwoWay}">
+        <dialogHost:DialogHost.DialogContent>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Label VerticalContentAlignment="Center">Change Diameter</Label>
+                <Slider VerticalAlignment="Center"
+                        MinWidth="150"
+                        Minimum="10.0"
+                        Maximum="400.0"
+                        Value="{CompiledBinding SelectedCircle.Diameter}"/>
+            </StackPanel>
+        </dialogHost:DialogHost.DialogContent>
+        <DockPanel Margin="8">
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" DockPanel.Dock="Top"
+                        Margin="0,0,0,8">
+                <Button>Undo</Button>
+                <Button>Redo</Button>
+            </StackPanel>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <ItemsControl Items="{CompiledBinding Circles}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Name="Canvas" Background="Transparent">
+                                <i:Interaction.Behaviors>
+                                    <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Canvas">
+                                        <ia:InvokeCommandAction Command="{CompiledBinding AddCircleCommand}"
+                                                                InputConverter="{StaticResource MouseCoordinatesToTuple}"
+                                                                PassEventArgsToCommand="True" />
+                                    </ia:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                            </Canvas>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Styles>
+                        <Style Selector="ContentPresenter" x:DataType="vm:CircleViewModel">
+                            <Setter Property="Canvas.Left" Value="{CompiledBinding X}" />
+                            <Setter Property="Canvas.Top" Value="{CompiledBinding Y}" />
+                        </Style>
+                        <Style Selector="Ellipse.Selected">
+                            <Setter Property="Fill" Value="SlateGray"></Setter>
+                        </Style>
+                        <Style Selector="Ellipse.NotSelected">
+                            <Setter Property="Fill" Value="White"></Setter>
+                        </Style>
+                    </ItemsControl.Styles>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Ellipse Name="Ellipse" Width="{CompiledBinding Diameter}"
+                                     Height="{CompiledBinding Diameter}"
+                                     Stroke="Black"
+                                     StrokeThickness="1"
+                                     Classes.NotSelected="{CompiledBinding !IsSelected}"
+                                     Classes.Selected="{CompiledBinding IsSelected}">
+                                <i:Interaction.Behaviors>
+                                    <ia:EventTriggerBehavior EventName="Tapped" SourceObject="Ellipse">
+                                        <ia:ChangePropertyAction
+                                            TargetObject="{CompiledBinding $parent[Window].DataContext}"
+                                            PropertyName="SelectedCircle"
+                                            Value="{CompiledBinding .}">
+                                        </ia:ChangePropertyAction>
+                                    </ia:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                                <Ellipse.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="_Change Diameter"
+                                                  Command="{Binding $parent[Window].DataContext.ShowDialogCommand}"
+                                                  IsEnabled="{CompiledBinding IsSelected}" />
+                                    </ContextMenu>
+                                </Ellipse.ContextMenu>
+                            </Ellipse>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </DockPanel>
+    </dialogHost:DialogHost>
 
 </Window>
