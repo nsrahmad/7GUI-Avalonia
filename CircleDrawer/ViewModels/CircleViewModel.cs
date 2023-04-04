@@ -9,7 +9,7 @@ public partial class CircleViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(X))]
     [NotifyPropertyChangedFor(nameof(Y))]
     private double diameter = 50;
-
+    
     public double X => CenterX - (Diameter / 2.0);
 
     public double Y => CenterY - (Diameter / 2.0);
@@ -19,7 +19,4 @@ public partial class CircleViewModel : ObservableObject
 
     [ObservableProperty]
     private bool isSelected;
-
-    [RelayCommand]
-    private void OnChangeDiameter(CircleViewModel circle) => circle.Diameter += 5;
 }
