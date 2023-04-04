@@ -47,7 +47,7 @@
                         <ItemsPanelTemplate>
                             <Canvas Name="Canvas" Background="Transparent">
                                 <i:Interaction.Behaviors>
-                                    <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Canvas">
+                                    <ia:EventTriggerBehavior EventName="Tapped" SourceObject="Canvas">
                                         <ia:InvokeCommandAction Command="{CompiledBinding AddCircleCommand}"
                                                                 InputConverter="{StaticResource MouseCoordinatesToTuple}"
                                                                 PassEventArgsToCommand="True" />

@@ -11,7 +11,7 @@ public class MouseCoordinatesToTuple : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        var e = value as PointerPressedEventArgs;
+        var e = value as TappedEventArgs;
         return e!.Source is Canvas canvas
             ? new Tuple<double, double>(e.GetPosition(canvas).X, e.GetPosition(canvas).Y)
             : null;
