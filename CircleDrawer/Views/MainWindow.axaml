@@ -38,8 +38,8 @@
         <DockPanel Margin="8">
             <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" DockPanel.Dock="Top"
                         Margin="0,0,0,8">
-                <Button>Undo</Button>
-                <Button>Redo</Button>
+                <Button Command="{CompiledBinding UndoButtonClickedCommand}">Undo</Button>
+                <Button Command="{CompiledBinding RedoButtonClickedCommand}">Redo</Button>
             </StackPanel>
             <Border BorderThickness="1" BorderBrush="Black">
                 <ItemsControl Items="{CompiledBinding Circles}">
