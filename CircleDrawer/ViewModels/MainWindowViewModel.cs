@@ -6,11 +6,12 @@ using CommunityToolkit.Mvvm.Input;
 namespace CircleDrawer.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly UndoManager<ImmutableList<CircleViewModel>>
-        undoManager = new(ImmutableList<CircleViewModel>.Empty);
-    private CircleViewModel? beforeUpdateCircle;
-    public ImmutableList<CircleViewModel>? Circles => undoManager.Current();
-    
+    private static readonly UndoManager<ImmutableList<CircleViewModel>> UndoManager = new(ImmutableList<CircleViewModel>.Empty);
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(UndoButtonClickedCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RedoButtonClickedCommand))]
+    private ImmutableList<CircleViewModel> circles = UndoManager.Current();
 
     [ObservableProperty] private CircleViewModel? selectedCircle;
     [ObservableProperty] private bool isDialogOpen;
@@ -77,19 +78,14 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(Circles));
     }
 
-    [RelayCommand]
-    private void OnUndoButtonClicked()
-    {
-        undoManager.Undo();
-        OnPropertyChanged(nameof(Circles));
-    }
+    private static bool CanUndo() => UndoManager.IsUndoAvailable();
+    private static bool CanRedo() => UndoManager.IsRedoAvailable();
 
-    [RelayCommand]
-    private void OnRedoButtonClicked()
-    {
-        undoManager.Redo();
-        OnPropertyChanged(nameof(Circles));
-    }
+    [RelayCommand(CanExecute = nameof(CanUndo))]
+    private void OnUndoButtonClicked() => Circles = UndoManager.Undo();
+
+    [RelayCommand(CanExecute = nameof(CanRedo))]
+    private void OnRedoButtonClicked() => Circles = UndoManager.Redo();
 
     [RelayCommand]
     private void OnShowDialog() => IsDialogOpen = true;
