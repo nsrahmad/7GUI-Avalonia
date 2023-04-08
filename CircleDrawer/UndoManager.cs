@@ -31,6 +31,16 @@ public class UndoManager<T>
         return Current();
     }
 
+    public void ResetRedo()
+    {
+        if (!IsRedoAvailable()) return;
+        // Intentionally leaves one item (InitialState)
+        for (var i = 0; i < redoStack.Count; i++)
+        {
+            redoStack.Pop();
+        }
+    }
+
     public T Current() => undoStack.Peek();
 
     public bool IsUndoAvailable() => undoStack.Count > 1;

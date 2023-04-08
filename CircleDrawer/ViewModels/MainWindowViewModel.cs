@@ -57,6 +57,8 @@ public partial class MainWindowViewModel : ObservableObject
 
             Circles = UndoManager.Record(UndoManager.Current().Replace(SelectedCircle!, afterUpdateCircle));
             SelectedCircle = afterUpdateCircle;
+            UndoManager.ResetRedo();
+            RedoButtonClickedCommand.NotifyCanExecuteChanged();
         }
     }
 
@@ -73,6 +75,8 @@ public partial class MainWindowViewModel : ObservableObject
                 CenterY = coords.Item2,
             }
         ));
+        UndoManager.ResetRedo();
+        RedoButtonClickedCommand.NotifyCanExecuteChanged();
     }
 
     private static bool CanUndo() => UndoManager.IsUndoAvailable();
