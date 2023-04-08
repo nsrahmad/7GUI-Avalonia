@@ -2,42 +2,38 @@ using System.Collections.Generic;
 
 namespace CircleDrawer;
 
-public class UndoManager<T> where T : class
+public class UndoManager<T>
 {
-    private readonly Stack<T> undoStack;
-    private readonly Stack<T> redoStack;
+    private readonly Stack<T> undoStack = new();
+    private readonly Stack<T> redoStack = new();
 
     public UndoManager(T initialState)
     {
-        undoStack = new Stack<T>();
         undoStack.Push(initialState);
-        redoStack = new Stack<T>();
         redoStack.Push(initialState);
     }
 
-    public void Record(T item)
+    public T Record(T item)
     {
         undoStack.Push(item);
+        return Current();
     }
 
-    public void Undo()
+    public T Undo()
     {
-        if (undoStack.Count > 0 && undoStack.TryPop(out var item))
-        {
-            redoStack.Push(item);
-        }
+        redoStack.Push(undoStack.Pop());
+        return Current();
     }
 
-    public void Redo()
+    public T Redo()
     {
-        if (redoStack.Count > 0 && redoStack.TryPop(out var item))
-        {
-            undoStack.Push(item);
-        }
+        undoStack.Push(redoStack.Pop());
+        return Current();
     }
 
-    public T? Current()
-    {
-        return undoStack.TryPeek(out var item) ? item : null;
-    }
+    public T Current() => undoStack.Peek();
+
+    public bool IsUndoAvailable() => undoStack.Count > 1;
+
+    public bool IsRedoAvailable() => redoStack.Count > 1;
 }
