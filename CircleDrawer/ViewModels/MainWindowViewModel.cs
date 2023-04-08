@@ -13,10 +13,13 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RedoButtonClickedCommand))]
     private ImmutableList<CircleViewModel> circles = UndoManager.Current();
 
-    [ObservableProperty] private CircleViewModel? selectedCircle;
-    [ObservableProperty] private bool isDialogOpen;
+    [ObservableProperty] 
+    private CircleViewModel? selectedCircle;
 
-    
+    [ObservableProperty] 
+    private bool isDialogOpen;
+
+
     partial void OnSelectedCircleChanging(CircleViewModel? value)
     {
         _ = value;
@@ -25,40 +28,35 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     partial void OnSelectedCircleChanged(CircleViewModel? value) => value!.IsSelected = true;
-    
-    // There is a lot of mental gymnastics here because of earlier decision
-    // of how SelectedCircle is implemented.
+
+
+    private readonly CircleViewModel beforeUpdateCircle = new();
+
     partial void OnIsDialogOpenChanged(bool value)
     {
         // value is true when the dialog opens
         if (value)
         {
-            beforeUpdateCircle = new CircleViewModel()
-            {
-                Diameter = SelectedCircle!.Diameter,
-                CenterX = SelectedCircle.CenterX,
-                CenterY = SelectedCircle.CenterY,
-            };
+            beforeUpdateCircle.Diameter = SelectedCircle!.Diameter;
+            beforeUpdateCircle.CenterX = SelectedCircle.CenterX;
+            beforeUpdateCircle.CenterY = SelectedCircle.CenterY;
+
         }
         else // value is false when dialog is closing
         {
-            var updatedCircle = new CircleViewModel()
+            CircleViewModel afterUpdateCircle = new()
             {
                 Diameter = SelectedCircle!.Diameter,
                 CenterX = SelectedCircle.CenterX,
-                CenterY = SelectedCircle.CenterY,
+                CenterY = SelectedCircle.CenterY
             };
-            
-            var circle = undoManager.Current()!.FindLast(x => x == SelectedCircle);
-            if (circle != null)
-            {
-                circle.Diameter = beforeUpdateCircle!.Diameter;
-                circle.CenterX = beforeUpdateCircle.CenterX;
-                circle.CenterY = beforeUpdateCircle.CenterY;
-            }
-            undoManager.Record(undoManager.Current()!.Replace(SelectedCircle!,updatedCircle));
-            SelectedCircle = updatedCircle;
-            OnPropertyChanged(nameof(Circles));
+
+            SelectedCircle.Diameter = beforeUpdateCircle.Diameter;
+            SelectedCircle.CenterX = beforeUpdateCircle.CenterX;
+            SelectedCircle.CenterY = beforeUpdateCircle.CenterY;
+
+            Circles = UndoManager.Record(UndoManager.Current().Replace(SelectedCircle!, afterUpdateCircle));
+            SelectedCircle = afterUpdateCircle;
         }
     }
 
@@ -66,8 +64,8 @@ public partial class MainWindowViewModel : ObservableObject
     private void OnAddCircle(Tuple<double, double>? coords)
     {
         if (coords == null) return;
-        
-        undoManager.Record(undoManager.Current()!.Add(
+
+        Circles = UndoManager.Record(UndoManager.Current().Add(
             new CircleViewModel
             {
                 Diameter = 50,
@@ -75,7 +73,6 @@ public partial class MainWindowViewModel : ObservableObject
                 CenterY = coords.Item2,
             }
         ));
-        OnPropertyChanged(nameof(Circles));
     }
 
     private static bool CanUndo() => UndoManager.IsUndoAvailable();
