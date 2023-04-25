@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -13,12 +14,11 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RedoButtonClickedCommand))]
     private ImmutableList<CircleViewModel> circles = UndoManager.Current();
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private CircleViewModel? selectedCircle;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private bool isDialogOpen;
-
 
     partial void OnSelectedCircleChanging(CircleViewModel? value)
     {
@@ -28,7 +28,6 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     partial void OnSelectedCircleChanged(CircleViewModel? value) => value!.IsSelected = true;
-
 
     private readonly CircleViewModel beforeUpdateCircle = new();
 
