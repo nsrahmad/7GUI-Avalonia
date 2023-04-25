@@ -1,8 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:FlightBooker.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         SizeToContent="WidthAndHeight"
         x:Class="FlightBooker.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
@@ -17,10 +15,12 @@
 
 	<Border Padding="8">
 		<StackPanel Spacing="8">
-			<ComboBox x:Name="FlightTypeCB" Items="{CompiledBinding FlightType, Mode=OneWay}" SelectedIndex="0" SelectedItem="{CompiledBinding SelectedFlightType, Mode=OneWayToSource}">
+			<ComboBox x:Name="FlightTypeCb"
+			          ItemsSource="{CompiledBinding FlightType}"
+			          SelectedItem="{CompiledBinding SelectedFlightType}">
 			</ComboBox>
 			<CalendarDatePicker SelectedDate="{CompiledBinding FlightDate}"></CalendarDatePicker>
-			<CalendarDatePicker SelectedDate="{CompiledBinding ReturnFlightDate}" IsEnabled="{CompiledBinding #FlightTypeCB.SelectedIndex}"></CalendarDatePicker>
+			<CalendarDatePicker SelectedDate="{CompiledBinding ReturnFlightDate}" IsEnabled="{CompiledBinding #FlightTypeCb.SelectedIndex}"></CalendarDatePicker>
 			<StackPanel Orientation="Horizontal" Spacing="8">
 				<Button IsEnabled="{CompiledBinding !HasErrors}" Command="{CompiledBinding BookClickedCommand}">Book</Button>
 				<Button IsEnabled="{CompiledBinding !!Message}" Command="{CompiledBinding ClearMessageClickedCommand}">Clear Message</Button>

@@ -64,8 +64,9 @@
 				<TextBox Margin="8,0,0,8" Text="{CompiledBinding FilterString}"></TextBox>
 			</DockPanel>
 			<ListBox MinWidth="300" 
-			         Items="{CompiledBinding Contacts}"
-			         SelectedItem="{CompiledBinding SelectedContact}">
+			         ItemsSource="{CompiledBinding Contacts}"
+			         SelectionMode="AlwaysSelected"
+					 SelectedValue="{CompiledBinding SelectedContact}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock>

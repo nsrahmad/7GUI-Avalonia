@@ -42,7 +42,7 @@
                 <Button Command="{CompiledBinding RedoButtonClickedCommand}">Redo</Button>
             </StackPanel>
             <Border BorderThickness="1" BorderBrush="Black">
-                <ItemsControl Items="{CompiledBinding Circles}">
+                <ItemsControl ItemsSource="{CompiledBinding Circles}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas Name="Canvas" Background="Transparent">
