@@ -9,11 +9,10 @@ namespace FlightBooker.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    [ObservableProperty]
-    private List<string> flightType = new() { "one-way flight", "return flight" };
+    public static List<string> FlightType { get; } = new() { "one-way flight", "return flight" };
 
     [ObservableProperty]
-    private string selectedFlightType = string.Empty;
+    private string selectedFlightType = FlightType[0];
 
     partial void OnSelectedFlightTypeChanged(string value) => ValidateAllProperties();
 
@@ -45,7 +44,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
         return instance.SelectedFlightType.Equals("one-way flight")
             ? ValidationResult.Success!
-            : returnFlightDate >= instance.flightDate ? ValidationResult.Success! : (new("The return flight date must be a valid date equal to or after flight date."));
+            : returnFlightDate >= instance.flightDate ? ValidationResult.Success! : new("The return flight date must be a valid date equal to or after flight date.");
     }
 
     [ObservableProperty]
@@ -56,5 +55,4 @@ public partial class MainWindowViewModel : ObservableValidator
 
     [RelayCommand]
     private void OnClearMessageClicked() => Message = null;
-
 }
