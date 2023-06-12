@@ -11,7 +11,7 @@
         x:Class="CircleDrawer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="CircleDraw">
+        Title="Circle Drawer">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -24,7 +24,8 @@
     </Window.Resources>
 
     <dialogHost:DialogHost CloseOnClickAway="True"
-                           IsOpen="{CompiledBinding IsDialogOpen, Mode=TwoWay}">
+                           IsOpen="{CompiledBinding IsDialogOpen, Mode=TwoWay}"
+                           DisableOpeningAnimation="True">
         <dialogHost:DialogHost.DialogContent>
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <Label VerticalContentAlignment="Center">Change Diameter</Label>
