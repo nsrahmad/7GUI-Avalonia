@@ -9,10 +9,9 @@ using CRUD.Models;
 namespace CRUD.Infrastructure;
 internal static class Utils
 {
-    public static List<ObservableContact> LoadData()
+    public static IEnumerable<ObservableContact> LoadData()
     {
-        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        using var contactsOnDisk = assets!.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv"));
+        using var contactsOnDisk = AssetLoader.Open(new System.Uri("avares://CRUD/Assets/MOCK_DATA.csv"));
         using StreamReader reader = new(contactsOnDisk);
         List<ObservableContact> contacts = new();
 
