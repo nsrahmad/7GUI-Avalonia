@@ -43,9 +43,9 @@ public partial class MainWindowViewModel : ObservableValidator
 
     public static ValidationResult ValidateReturnFlightDate(DateTime? returnFlightDate, ValidationContext context)
     {
-        MainWindowViewModel instance = (MainWindowViewModel)context.ObjectInstance;
+        var instance = context.ObjectInstance as MainWindowViewModel;
 
-        return instance.SelectedFlightType.Equals("one-way flight")
+        return instance!.SelectedFlightType.Equals("one-way flight")
             ? ValidationResult.Success!
             : returnFlightDate >= instance.flightDate
                 ? ValidationResult.Success!
