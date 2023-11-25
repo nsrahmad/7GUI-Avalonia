@@ -4,11 +4,15 @@ using _1_Counter.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using HotAvalonia;
 
 namespace _1_Counter;
 public partial class App : Application
 {
-    public override void Initialize() => AvaloniaXamlLoader.Load(this);
+    public override void Initialize() {
+        this.EnableHotReload();
+        AvaloniaXamlLoader.Load(this);
+    } 
 
     public override void OnFrameworkInitializationCompleted()
     {
